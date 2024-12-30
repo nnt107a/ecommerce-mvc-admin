@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  ecommerce:
+    image: ecommerce/app
+    build:
+      context: .
+    container_name: ecommerce_app
+    ports:
+    - "8000:8000"
