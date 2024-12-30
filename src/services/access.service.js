@@ -37,13 +37,14 @@ class AccessService {
       email,
       password: passwordHash,
       verificationToken,
+      role: "Admin",
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     });
     if (!newCustomer) {
       throw new Error("Failed to create new shop");
     }
     await sendVerificationEmail(email, verificationToken);
-    console.log("Verification email sent1 ");
+    console.log("Verification email sent");
     return {
       success: true,
       newCustomer: newCustomer,

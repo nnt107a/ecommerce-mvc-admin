@@ -30,7 +30,6 @@ class OrderService {
           return [];
         }
     
-        // Extract relevant fields for each order
         return userOrders;
       }
       static async getOrderById(orderId) {

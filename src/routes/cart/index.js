@@ -1,6 +1,5 @@
 "use strict";
 const CartController = require("../../controllers/cart.controller");
-const CartService = require("../../services/cart.service");
 const express = require("express");
 const {ensureAuthenticated} = require("../../middleware/authMiddleware");
 const router = express.Router();
@@ -29,14 +28,6 @@ router.post("/cart-add", ensureAuthenticated, CartController.addToCart);
 router.post("/cart-update", CartController.updateCart);
 router.post("/cart-remove-product", CartController.removeFromCart);
 
-router.get('/user-cart', async (req, res) => {
-    try {
-        const userId = req.session.userId;
-        const cart = await CartService.getUserCart(userId);
-        res.json(cart);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to get user cart' });
-    }
-});
+router.get('/user-cart', CartController.getCart);
 
 module.exports = router;

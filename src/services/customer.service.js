@@ -14,4 +14,13 @@ const findById = async ({ userId, select = { email: 1, name: 1 } }) => {
     .select(select)
     .lean();
 };
-module.exports = { findByEmail, findById };
+const getAllUser = async () => {
+  return await customerModel.find({}).lean();
+};
+const getUserById = async (id) => {
+  return await customerModel.findOne({ _id: new ObjectId(id) }).lean();
+}
+const updateStatus = async (id, status) => {
+  return await customerModel.updateOne({ _id: new ObjectId(id) }, { status });
+}
+module.exports = { findByEmail, findById, getAllUser, getUserById, updateStatus };

@@ -37,5 +37,14 @@ class CartController {
     const result = await CartService.removeProduct(userId, productId);
     return res.json({ message: 'Product removed from cart', result });;
   };
+  getCart = async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const cart = await CartService.getUserCart(userId);
+        res.json(cart);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to get user cart' });
+    }
+  };
 }
 module.exports = new CartController();

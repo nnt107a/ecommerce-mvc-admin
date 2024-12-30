@@ -2,6 +2,7 @@
 const OrderService = require("../services/order.service");
 const CartService = require("../services/cart.service");
 const AccessService = require("../services/access.service");
+const { hashId } = require("../utils/hash");
 class OrderController {
     getOrder = async (req, res) => {
         const result = await OrderService.getAllUserOrders(req.session.userId);
@@ -12,6 +13,7 @@ class OrderController {
         avatar,
         isAuthenticated: req.isAuthenticated(),
         orders: result,
+        hashId,
         });
     }
     checkout = async (req, res) => {

@@ -76,7 +76,7 @@
                 >Pages</a
               >
               <div class="dropdown-menu rounded-0 m-0">
-                <a href="./cart" class="dropdown-item">Shopping Cart</a>
+                <a href="./account" class="dropdown-item">Account List</a>
                 <a href="./order" class="dropdown-item">Order History</a>
               </div>
             </div>
@@ -143,7 +143,7 @@
             <% if (orders && orders.length > 0) { %>
               <% orders.forEach(order => { %>
                 <tr>
-                  <td class="align-middle"><%= order.orderId.toString() %></td>
+                  <td class="align-middle"><%= hashId(order.orderId.toString()) %></td>
                   <td class="align-middle"><%= order.userName %></td>
                   <td class="align-middle"><%= order.userAddress %></td>
                   <td class="align-middle"><%= order.userPhone %></td>
@@ -157,7 +157,7 @@
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="4">No orders found.</td>
+                <td colspan="12">No orders found.</td>
               </tr>
             <% } %>
           </tbody>

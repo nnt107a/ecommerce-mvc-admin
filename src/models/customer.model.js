@@ -26,8 +26,8 @@ const customerSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["active", "inactive"],
-      default: "inactive",
+      enum: ["Active", "Inactive"],
+      default: "Active",
     },
     lastLogin: {
 			type: Date,
@@ -37,6 +37,11 @@ const customerSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+    role: {
+      type: String,
+      enum: ["Customer", "Admin"],
+      default: "Customer",
+    },
 		resetPasswordToken: String,
 		resetPasswordExpiresAt: Date,
 		verificationToken: String,

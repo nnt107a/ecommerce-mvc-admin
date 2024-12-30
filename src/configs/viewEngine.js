@@ -33,6 +33,10 @@ const configViewEngine = (app) => {
       `/order/${staticPath}`,
       express.static(path.join(__dirname, `../views/${staticPath}`))
     );
+    app.use(
+      `/account/${staticPath}`,
+      express.static(path.join(__dirname, `../views/${staticPath}`))
+    );
   });
 };
 
