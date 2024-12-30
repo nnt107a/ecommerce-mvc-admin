@@ -11,14 +11,18 @@ const customerStrategy = new LocalStrategy(
     try {
       const foundCustomer = await findByEmail({ email });
       if (!foundCustomer) {
-        console.log("Customer not registered.");
-        return cb(null, false, { message: "Customer is not registered." });
+        console.log("Admin not registered.");
+        return cb(null, false, { message: "Admin is not registered." });
       }
 
       const match = await bcrypt.compare(password, foundCustomer.password);
       if (!match) {
         console.log("Incorrect email or password.");
         return cb(null, false, { message: "Incorrect email or password." });
+      }
+      if (foundCustomer.role != "Admin") {
+        console.log("Admin account only.");
+        return cb(null, false, { message: "Admin account only." });
       }
 
       console.log("Customer authenticated successfully.");
