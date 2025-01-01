@@ -5,15 +5,19 @@ const AccessService = require("../services/access.service");
 const { hashId } = require("../utils/hash");
 class OrderController {
     getOrder = async (req, res) => {
-        const result = await OrderService.getAllUserOrders(req.session.userId);
+        const status = req.query.status || '';
+        const sort = req.query.sort || '';
+        const orders = await OrderService.getAllOrders(status, sort);
         const avatar = await AccessService.getAvatar(req.session.userId);
-        console.log('result = ', result);
+        console.log('result = ', orders);
         return res.render("order.ejs", {
         page: "order",
         avatar,
         isAuthenticated: req.isAuthenticated(),
-        orders: result,
+        orders: orders,
         hashId,
+        status,
+        sort,
         });
     }
     checkout = async (req, res) => {
@@ -50,6 +54,18 @@ class OrderController {
           avatar,
           isAuthenticated: req.isAuthenticated(),
         });
+    };
+    updateOrderStatus = async (req, res) => {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        try {
+            await OrderService.updateOrderStatus(id, status);
+            res.json({ success: true });
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            res.status(500).json({ success: false, message: 'Failed to update order status' });
+        }
     };
 }
 module.exports = new OrderController();

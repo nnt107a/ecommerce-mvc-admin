@@ -36,5 +36,26 @@ class OrderService {
         console.log("get order by id", orderId);
         return await order.findOne({ orderId: orderId }).lean();
       }
+      static async getAllOrders(status = '', sort = '') {
+        const query = {
+            $and: [
+                status ? { status } : {}
+            ]
+        };
+
+        let sortOption = {};
+        if (sort === 'createdAtAsc') {
+            sortOption = { createdAt: 1 };
+        } else if (sort === 'createdAtDesc') {
+            sortOption = { createdAt: -1 };
+        }
+
+        return await order.find(query).sort(sortOption).lean();
+      }
+
+      static async updateOrderStatus(orderId, status) {
+        console.log("update order status", orderId, status);
+        return await order.findOneAndUpdate({ orderId: orderId }, { status: status });
+      }
 }
 module.exports = OrderService;
