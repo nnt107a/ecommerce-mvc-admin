@@ -1,9 +1,7 @@
 function loadPage(page, sortBy = '') {
   const searchQuery = document.getElementById('search').value;
-  const price = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(checkbox => checkbox.value);
-  const color = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(checkbox => checkbox.value);
-  const size = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(checkbox => checkbox.value);
-  const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(checkbox => checkbox.value);
+  const productType = document.getElementById('product_type').value;
+  const brand = document.getElementById('brand').value;
 
     $.ajax({
       url: '/shop',
@@ -11,10 +9,8 @@ function loadPage(page, sortBy = '') {
       data: {
         currentPage: page,
         search: searchQuery,
-        price: price,
-        color: color,
-        size: size,
-        gender: gender,
+        product_type: productType,
+        brand: brand,
         sortBy: sortBy,
       },
       success: function(data) {

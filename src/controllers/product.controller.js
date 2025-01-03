@@ -1,6 +1,8 @@
 "use strict";
 const ProductService = require("../services/product.service");
 const AccessService = require("../services/access.service");
+const CategoryService = require("../services/category.service");
+const ManufacturerService = require("../services/manufacturer.service");
 const { product } = require("../models/product.model");
 class ProductController {
   getCart = async (req, res) => {
@@ -39,20 +41,20 @@ class ProductController {
     const limit = parseInt(req.query.limit) || 9;
     const skip = (currentPage - 1) * limit;
     const searchQuery = req.query.search || "";
-    const price = req.query.price || "";
-    const color = req.query.color || "";
-    const size = req.query.size || "";
-    const gender = req.query.gender || "";
+    const product_type = req.query.product_type || "";
+    const product_brand = req.query.brand || "";
     const sortBy = req.query.sortBy || "";
 
     try {
-      const {products, totalPages} = await ProductService.getShopProducts(limit, skip, searchQuery, price, color, size, gender, sortBy);
+      const {products, totalPages} = await ProductService.getShopProducts(limit, skip, searchQuery, product_type, product_brand, sortBy);
 
       if (req.xhr || req.headers.accept.indexOf('json') > -1) {
         // If the request is an AJAX request, return JSON data
         return res.json({ products, totalPages, currentPage, sortBy });
       } else {
         const avatar = await AccessService.getAvatar(req.session.userId);
+        const productTypes = await CategoryService.getCategoryName();
+        const brands = await ManufacturerService.getManufacturerName();
         // Otherwise, render the shop view
         res.render("shop.ejs", {
           page: "shop",
@@ -62,10 +64,10 @@ class ProductController {
           totalPages,
           currentPage,
           searchQuery,
-          price,
-          color,
-          size,
-          gender,
+          product_type,
+          product_brand,
+          productTypes,
+          brands,
           sortBy,
         });
       }

@@ -5,6 +5,7 @@ const {
   maleClothe,
   kidClothe,
 } = require("../models/product.model");
+const ManufacturerService = require("../services/manufacturer.service");
 const { BadRequestError, Forbiden } = require("../core/error.response");
 const { order } = require("../models/order.model");
 class ProductFactory {
@@ -45,51 +46,35 @@ class ProductFactory {
       .find({ product_type: type, _id: { $ne: id } })
       .limit(limit);
   }
-  static async getShopProducts(limit, skip, searchQuery, price, color, size, gender, sortBy) {
+  static async getShopProducts(limit, skip, searchQuery, product_type, product_brand, sortBy) {
     // Build the query object
     let query = {};
 
     if (searchQuery) {
-      query.$or = [
-        { product_name: { $regex: searchQuery, $options: "i" } },
-        { product_description: { $regex: searchQuery, $options: "i" } },
-      ];
+      query = { product_name: { $regex: searchQuery, $options: "i" } };
     }
     
-    if (price) {
-      const priceRanges = Array.isArray(price) ? price : [price];
-      const priceFilter = priceRanges.map((range) => {
-        const [min, max] = range.split("-").map(Number);
-        return { product_price: { $gte: min, $lte: max } };
-      });
-
-      if (query.$or) {
-        query.$and = [{ $or: query.$or }, { $or: priceFilter }];
-        delete query.$or;
-      } else {
-        query.$or = priceFilter;
-      }
+    if (product_type) {
+      query['product_type'] = product_type;
     }
 
-    if (color) {
-      query.product_color = { $in: Array.isArray(color) ? color : [color] };
-    }
-
-    if (size) {
-      query.product_size = { $in: Array.isArray(size) ? size : [size] };
-    }
-
-    if (gender) {
-      query.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
+    if (product_brand) {
+      query['product_attributes.brand'] = product_brand;
     }
 
     let sort = {};
     if (sortBy === "latest") {
       sort = { createdAt: -1 };
+    } else if (sortBy === "oldest") {
+      sort = { createdAt: 1 };
     } else if (sortBy === "lPrice") {
       sort = { product_price: 1 }; 
     } else if (sortBy === "hPrice") {
       sort = { product_price: -1 };
+    } else if (sortBy === "bestSeller") {
+      sort = { product_quantity_sold: -1 };
+    } else if (sortBy === "worstSeller") {
+      sort = { product_quantity_sold: 1 };
     }
 
     const [products, total] = await Promise.all([
@@ -102,18 +87,25 @@ class ProductFactory {
     return { products, totalPages };
   }
   static async addProductQuantitySoldField() {
+    const manufacturerNames = await ManufacturerService.getManufacturerName();
+
+    // Fetch products
     const products = await product.find().lean();
-    const updatedProducts = products.map(product => ({
-        ...product,
-        product_quantity_sold: 0
-    }));
 
-    // Optionally, you can save the updated products back to the database
-    for (const product1 of updatedProducts) {
-        await product.updateOne({ _id: product1._id }, { product_quantity_sold: product1.product_quantity_sold });
-    }
+    // Filter products based on manufacturer names
+    const validProducts = products.filter(product => 
+      manufacturerNames.includes(product.product_attributes['brand'])
+    );
 
-    return updatedProducts;
+    const invalidProducts = products.filter(product => 
+      !manufacturerNames.includes(product.product_attributes['brand'])
+    );
+
+    // Remove invalid products from the database
+    const invalidProductIds = invalidProducts.map(product => product._id);
+    await product.deleteMany({ _id: { $in: invalidProductIds } });
+
+    return invalidProductIds;
   }
   static async getRevenueReport(timeRange) {
     const currentDate = new Date();

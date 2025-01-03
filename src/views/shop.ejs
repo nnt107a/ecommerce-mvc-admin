@@ -135,151 +135,25 @@
               value="<%= searchQuery %>"
             />
           </div>
-          <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="price-1"
-            name="price" value="0-50" <%= price.includes('0-50') ? 'checked' :
-            '' %>/>
-            <label class="custom-control-label" for="price-1">$0 - $50</label>
+          <h5 class="font-weight-semi-bold mb-4">Filter by Categories</h5>
+          <div class="form-group">
+            <select class="form-control" name="product_type" id="product_type">
+              <option value="">All Categories</option>
+              <% productTypes.forEach(type => { %>
+                <option value="<%= type %>" <%= product_type === type ? 'selected' : '' %>><%= type %></option>
+              <% }) %>
+            </select>
           </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="price-2"
-            name="price" value="50-100" <%= price.includes('50-100') ? 'checked'
-            : '' %>/>
-            <label class="custom-control-label" for="price-2">$50 - $100</label>
+          <h5 class="font-weight-semi-bold mb-4">Filter by Manufacturers</h5>
+          <div class="form-group">
+            <select class="form-control" name="brand" id="brand">
+              <option value="">All Manufacturers</option>
+              <% brands.forEach(brand => { %>
+                <option value="<%= brand %>" <%= product_brand === brand ? 'selected' : '' %>><%= brand %></option>
+              <% }) %>
+            </select>
           </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="price-3"
-            name="price" value="100-150" <%= price.includes('100-150') ?
-            'checked' : '' %>/>
-            <label class="custom-control-label" for="price-3"
-              >$100 - $150</label
-            >
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="price-4"
-            name="price" value="150-200" <%= price.includes('150-200') ?
-            'checked' : '' %>/>
-            <label class="custom-control-label" for="price-4"
-              >$150 - $200</label
-            >
-          </div>
-          <!-- Price End -->
-
-          <!-- Color Start -->
-          <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="color-1"
-            name="color" value="Black" <%= color.includes('Black') ? 'checked' :
-            '' %>/>
-            <label class="custom-control-label" for="color-1">Black</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="color-2"
-            name="color" value="White" <%= color.includes('White') ? 'checked' :
-            '' %>/>
-            <label class="custom-control-label" for="color-2">White</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="color-3"
-            name="color" value="Red" <%= color.includes('Red') ? 'checked' : ''
-            %>/>
-            <label class="custom-control-label" for="color-3">Red</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="color-4"
-            name="color" value="Blue" <%= color.includes('Blue') ? 'checked' :
-            '' %>/>
-            <label class="custom-control-label" for="color-4">Blue</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between"
-          >
-            <input type="checkbox" class="custom-control-input" id="color-5"
-            name="color" value="Green" <%= color.includes('Green') ? 'checked' :
-            '' %>/>
-            <label class="custom-control-label" for="color-5">Green</label>
-          </div>
-          <!-- Color End -->
-
-          <!-- Size Start -->
-          <h5 class="font-weight-semi-bold mb-4 mt-4">Filter by size</h5>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="size-1"
-            name="size" value="XS" <%= size.includes('XS') ? 'checked' : '' %>/>
-            <label class="custom-control-label" for="size-1">XS</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="size-2"
-            name="size" value="S" <%= size.includes('S') ? 'checked' : '' %>/>
-            <label class="custom-control-label" for="size-2">S</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="size-3"
-            name="size" value="M" <%= size.includes('M') ? 'checked' : '' %>/>
-            <label class="custom-control-label" for="size-3">M</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="size-4"
-            name="size" value="L" <%= size.includes('L') ? 'checked' : '' %>/>
-            <label class="custom-control-label" for="size-4">L</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between"
-          >
-            <input type="checkbox" class="custom-control-input" id="size-5"
-            name="size" value="XL" <%= size.includes('XL') ? 'checked' : '' %>/>
-            <label class="custom-control-label" for="size-5">XL</label>
-          </div>
-          <!-- Size End -->
-
-          <!--Gender Start-->
-          <h5 class="font-weight-semi-bold mb-4 mt-4">Filter by gender</h5>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="gender-1"
-            name="gender" value="MaleClothe" <%= gender.includes('MaleClothe') ?
-            'checked' : '' %>/>
-            <label class="custom-control-label" for="gender-1">Male</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input type="checkbox" class="custom-control-input" id="gender-2"
-            name="gender" value="FemaleClothe" <%=
-            gender.includes('FemaleClothe') ? 'checked' : '' %>/>
-            <label class="custom-control-label" for="gender-2">Female</label>
-          </div>
-          <!--Gender End-->
-
-          <button type="submit" class="btn btn-primary mt-4">
-            Apply Filters
-          </button>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
         </form>
       </div>
     </div>
@@ -302,6 +176,12 @@
                 <a
                   class="dropdown-item"
                   href="#"
+                  onclick="sortProducts('oldest')"
+                  >Earliest</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
                   onclick="sortProducts('lPrice')"
                   >Lowest Price</a
                 >
@@ -310,6 +190,18 @@
                   href="#"
                   onclick="sortProducts('hPrice')"
                   >Highest Price</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="sortProducts('bestSeller')"
+                  >Most total purchase</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="sortProducts('worstSeller')"
+                  >Least total purchase</a
                 >
               </div>
             </div>
