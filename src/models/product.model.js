@@ -6,13 +6,14 @@ const COLLECTION_NAME = "Products";
 const productSchema = new Schema(
   {
     product_name: { type: String, required: true },
-    product_thumb: { type: String, required: true },
+    product_thumb: { type: [String], required: true },
     product_description: String,
     product_price: { type: Number, required: true },
     product_color: { type: String, required: true },
     product_size: { type: String, required: true },
     product_quantity: { type: Number, required: true },
     product_quantity_sold: { type: Number, default: 0 },
+    product_status: { type: String, enum: ["On stock", "Out of stock", "Suspend"] },
     product_type: {
       type: String,
       required: true,

@@ -2,6 +2,8 @@
 
 const CustomerService = require("../services/customer.service");
 const AccessService = require("../services/access.service");
+const CategoryService = require("../services/category.service");
+const ManufacturerService = require("../services/manufacturer.service");
 const { hashId } = require("../utils/hash");
 class AdminController {
     getAccount = async (req, res) => {
@@ -46,5 +48,19 @@ class AdminController {
         const result = await CustomerService.updateStatus(req.params.id, req.body.status);
         return res.json(result);
     };
+    getManageCateManu = async (req, res) => {
+        const avatar = await AccessService.getAvatar(req.session.userId);
+        return res.render("manage-cate-manu.ejs", { page: "manage-cate-manu", avatar, isAuthenticated: req.isAuthenticated() });
+    }
+    addCategory = async (req, res) => {
+        const result = await CategoryService.addCategory(req.body.categoryName);
+        const avatar = await AccessService.getAvatar(req.session.userId);
+        return res.render("manage-cate-manu.ejs", { page: "manage-cate-manu", avatar, isAuthenticated: req.isAuthenticated() });
+    }
+    addManufacturer = async (req, res) => {
+        const result = await ManufacturerService.addManufacturer(req.body.manufacturerName);
+        const avatar = await AccessService.getAvatar(req.session.userId);
+        return res.render("manage-cate-manu.ejs", { page: "manage-cate-manu", avatar, isAuthenticated: req.isAuthenticated() });
+    }
 }
 module.exports = new AdminController();

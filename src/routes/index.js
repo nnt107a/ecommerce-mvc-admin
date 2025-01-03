@@ -8,11 +8,8 @@ const router = express.Router();
 
 router.use("", require("./access"));
 router.use("", require("./product"));
-router.use("", require("./cart"));
 router.use("", require("./order"));
 router.use("", require("./review"));
 router.use("", require("./admin"));
-
-
 
 module.exports = router;

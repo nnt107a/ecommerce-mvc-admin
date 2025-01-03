@@ -12,5 +12,14 @@ class ManufacturerService {
             throw error;
         }
     }
+    async addManufacturer(manufacturerName) {
+        try {
+          const newManufacturer = new manufacturer({ manufacturer_name: manufacturerName });
+          return await newManufacturer.save();
+        } catch (error) {
+          console.error('Error adding manufacturer:', error);
+          throw error;
+        }
+    }
 }
 module.exports = new ManufacturerService;

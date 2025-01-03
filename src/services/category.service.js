@@ -12,5 +12,14 @@ class CategoryService {
           throw error;
         }
     }
+    async addCategory(categoryName) {
+        try {
+          const newCategory = new category({ category_name: categoryName });
+          return await newCategory.save();
+        } catch (error) {
+          console.error('Error adding category:', error);
+          throw error;
+        }
+    }
 }
 module.exports = new CategoryService;

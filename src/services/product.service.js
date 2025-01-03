@@ -87,25 +87,22 @@ class ProductFactory {
     return { products, totalPages };
   }
   static async addProductQuantitySoldField() {
-    const manufacturerNames = await ManufacturerService.getManufacturerName();
-
-    // Fetch products
     const products = await product.find().lean();
 
-    // Filter products based on manufacturer names
-    const validProducts = products.filter(product => 
-      manufacturerNames.includes(product.product_attributes['brand'])
-    );
+    // Update valid products with product_quantity_sold field and product_status
+    const updatedProducts = products.map(product => ({
+      ...product,
+      product_thumb: Array.isArray(product.product_thumb) ? product.product_thumb : [product.product_thumb]
+    }));
 
-    const invalidProducts = products.filter(product => 
-      !manufacturerNames.includes(product.product_attributes['brand'])
-    );
+    // Save the updated products back to the database
+    for (const product1 of updatedProducts) {
+      await product.updateOne({ _id: product1._id }, { 
+        product_thumb: product1.product_thumb
+      });
+    }
 
-    // Remove invalid products from the database
-    const invalidProductIds = invalidProducts.map(product => product._id);
-    await product.deleteMany({ _id: { $in: invalidProductIds } });
-
-    return invalidProductIds;
+    return updatedProducts;
   }
   static async getRevenueReport(timeRange) {
     const currentDate = new Date();
