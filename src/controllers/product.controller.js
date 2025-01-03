@@ -13,17 +13,12 @@ class ProductController {
   };
   getHome = async (req, res) => {
     try {
-      const products = await ProductService.getRandomProducts(4);
-      const latestProducts = await ProductService.getLatestProducts(4);
-
       const avatar = await AccessService.getAvatar(req.session.userId);
 
       // Render the index page with the random products
       res.render("index.ejs", {
         page: "home",
         avatar,
-        featuredProducts: products,
-        latestProducts: latestProducts,
         isAuthenticated: req.isAuthenticated(),
       });
     } catch (error) {
@@ -104,5 +99,27 @@ class ProductController {
     // });
     return res.json({ products: products });
   };
+  async getRevenueReport(req, res) {
+    const { timeRange } = req.query;
+
+    try {
+        const report = await ProductService.getRevenueReport(timeRange);
+        res.send(report);
+    } catch (error) {
+        console.error('Error fetching revenue report:', error);
+        res.status(500).send('Failed to fetch revenue report');
+    }
+  }
+  async getTopRevenueProducts(req, res) {
+    const { timeRange } = req.query;
+
+    try {
+        const report = await ProductService.getTopRevenueProducts(timeRange);
+        res.json(report);
+    } catch (error) {
+        console.error('Error fetching top revenue products:', error);
+        res.status(500).send('Failed to fetch top revenue products');
+    }
+  }
 }
 module.exports = new ProductController();

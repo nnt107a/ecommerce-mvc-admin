@@ -12,6 +12,7 @@ const productSchema = new Schema(
     product_color: { type: String, required: true },
     product_size: { type: String, required: true },
     product_quantity: { type: Number, required: true },
+    product_quantity_sold: { type: Number, default: 0 },
     product_type: {
       type: String,
       required: true,

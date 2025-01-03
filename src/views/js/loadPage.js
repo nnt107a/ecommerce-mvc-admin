@@ -53,7 +53,7 @@ function loadPage(page, sortBy = '') {
                   >
                     <i class="fas fa-eye text-primary mr-1"></i>View Detail
                   </a>
-                  <button type="submit" class="btn btn-sm text-dark p-0" onclick="addToCart('${product._id}', 1, '${product.product_price}')">
+                  <button type="submit" class="btn btn-sm text-dark p-0" disabled>
                     <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
                   </button>
                 </div>

@@ -11,6 +11,8 @@ router.get("/product-delete", deleteByDate);
 router.get("/get-all", asyncHandler(ProductController.getAllProduct));
 router.get("/get-by-id/:id", asyncHandler(ProductController.getProductById));
 router.get("/home", ProductController.getHome);
+router.get("/home/revenue", ensureAuthenticated, ProductController.getRevenueReport);
+router.get("/home/top-product", ensureAuthenticated, ProductController.getTopRevenueProducts);
 router.get("/contact", ProductController.getContact);
 router.get("/shop", ProductController.getShop);
 router.get("/detail/:id", ProductController.getDetail);

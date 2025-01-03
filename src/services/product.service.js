@@ -6,6 +6,7 @@ const {
   kidClothe,
 } = require("../models/product.model");
 const { BadRequestError, Forbiden } = require("../core/error.response");
+const { order } = require("../models/order.model");
 class ProductFactory {
   static async createProduct(type, payload) {
     switch (type) {
@@ -99,6 +100,150 @@ class ProductFactory {
     const totalPages = Math.ceil(total / limit);
 
     return { products, totalPages };
+  }
+  static async addProductQuantitySoldField() {
+    const products = await product.find().lean();
+    const updatedProducts = products.map(product => ({
+        ...product,
+        product_quantity_sold: 0
+    }));
+
+    // Optionally, you can save the updated products back to the database
+    for (const product1 of updatedProducts) {
+        await product.updateOne({ _id: product1._id }, { product_quantity_sold: product1.product_quantity_sold });
+    }
+
+    return updatedProducts;
+  }
+  static async getRevenueReport(timeRange) {
+    const currentDate = new Date();
+
+    let matchStages = [];
+    let labels = [];
+
+    for (let i = 6; i >= 0; i--) {
+        let startDate, endDate, label;
+
+        if (timeRange === 'day') {
+          startDate = new Date(currentDate);
+          startDate.setHours(0, 0, 0, 0);
+          startDate.setDate(startDate.getDate() - i);
+
+          endDate = new Date(startDate);
+          endDate.setHours(23, 59, 59, 999);
+          endDate.setDate(endDate.getDate());
+
+          label = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
+        } else if (timeRange === 'week') {
+          startDate = new Date(currentDate);
+          startDate.setHours(0, 0, 0, 0);
+          startDate.setDate(startDate.getDate() - (i * 7) - startDate.getDay());
+
+          endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + 6);
+          endDate.setHours(23, 59, 59, 999);
+
+          label = `${startDate.getDate()}/${startDate.getMonth() + 1} - ${endDate.getDate()}/${endDate.getMonth() + 1}`;
+        } else if (timeRange === 'month') {
+          startDate = new Date(currentDate);
+          startDate.setHours(0, 0, 0, 0);
+          startDate.setMonth(startDate.getMonth() - i);
+          startDate.setDate(1);
+
+          endDate = new Date(startDate);
+          endDate.setMonth(endDate.getMonth() + 1);
+          endDate.setDate(0);
+          endDate.setHours(23, 59, 59, 999);
+
+          label = `${startDate.getMonth() + 1}/${startDate.getFullYear()}`;
+        }
+
+        matchStages.push({
+            $match: {
+                createdAt: {
+                    $gte: startDate,
+                    $lt: endDate
+                }
+            }
+        });
+
+        labels.push(label);
+    }
+
+    const revenueReports = await Promise.all(matchStages.map(matchStage => 
+        order.aggregate([
+            matchStage,
+            {
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: "$totalPrice" }
+                }
+            }
+        ])
+    ));
+
+    return revenueReports.map((report, index) => ({
+        timeRange: labels[index],
+        totalRevenue: report.length > 0 ? report[0].totalRevenue : 0
+    }));
+  }
+  static async getTopRevenueProducts(timeRange) {
+      const currentDate = new Date();
+      
+      let startDate, endDate;
+
+        if (timeRange === 'day') {
+            startDate = new Date(currentDate);
+            startDate.setHours(0, 0, 0, 0);
+
+            endDate = new Date(startDate);
+            endDate.setHours(23, 59, 59, 999);
+        } else if (timeRange === 'week') {
+            startDate = new Date(currentDate);
+            startDate.setHours(0, 0, 0, 0);
+            startDate.setDate(startDate.getDate() - startDate.getDay());
+
+            endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 6);
+            endDate.setHours(23, 59, 59, 999);
+        } else if (timeRange === 'month') {
+            startDate = new Date(currentDate);
+            startDate.setHours(0, 0, 0, 0);
+            startDate.setDate(1);
+
+            endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + 1);
+            endDate.setDate(0);
+            endDate.setHours(23, 59, 59, 999);
+        }
+
+        const topRevenueProducts = await order.aggregate([
+            { $match: { createdAt: { $gte: startDate, $lt: endDate } } },
+            { $unwind: "$order_products" },
+            {
+                $group: {
+                    _id: "$order_products.product_id",
+                    totalRevenue: { $sum: { $multiply: ["$order_products.quantity", "$order_products.price"] } }
+                }
+            },
+            { $sort: { totalRevenue: -1 } },
+            { $limit: 5 }
+        ]);
+
+        // Fetch product details separately
+        const productIds = topRevenueProducts.map(product => product._id);
+        const products = await product.find({ _id: { $in: productIds } });
+
+        // Merge product details into topRevenueProducts
+        const topRevenueProductsWithDetails = topRevenueProducts.map(product => {
+            const productDetails = products.find(p => p._id.equals(product._id));
+            return {
+                ...product,
+                productName: productDetails ? productDetails.product_name : 'Unknown'
+            };
+        });
+
+        return topRevenueProductsWithDetails.reverse();
   }
 }
 
