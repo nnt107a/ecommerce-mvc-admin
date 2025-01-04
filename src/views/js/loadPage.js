@@ -25,7 +25,7 @@ function loadPage(page, sortBy = '') {
                 >
                   <img
                     class="img-fluid w-100 img-product"
-                    src="${product.product_thumb}"
+                    src="${product.product_thumb[0]}"
                     alt=""
                   />
                 </div>
@@ -49,9 +49,12 @@ function loadPage(page, sortBy = '') {
                   >
                     <i class="fas fa-eye text-primary mr-1"></i>View Detail
                   </a>
-                  <button type="submit" class="btn btn-sm text-dark p-0" disabled>
-                    <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
-                  </button>
+                  <a
+                    href="./edit-product/${product._id} "
+                    class="btn btn-sm text-dark p-0"
+                  >
+                    <i class="fas fa-eye text-primary mr-1"></i>Edit Product
+                  </a>
                 </div>
               </div>
             </div>

@@ -5,8 +5,6 @@ const { asyncHandler } = require("../../auth/checkAuth");
 const { ensureAuthenticated } = require("../../middleware/authMiddleware");
 const {createProduct, deleteByDate}= require("../../mock-data/generate-product")
 const router = express.Router();
-router.get("/product-create", createProduct);
-router.get("/product-delete", deleteByDate);
 
 router.get("/get-all", asyncHandler(ProductController.getAllProduct));
 router.get("/get-by-id/:id", asyncHandler(ProductController.getProductById));

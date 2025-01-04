@@ -12,4 +12,10 @@ router.get("/manage-cate-manu", ensureAuthenticated, AdminController.getManageCa
 router.post("/add-category", ensureAuthenticated, AdminController.addCategory);
 router.post("/add-manufacturer", ensureAuthenticated, AdminController.addManufacturer);
 
+router.get("/add-product", ensureAuthenticated, AdminController.getAddProduct);
+router.post("/add-product", ensureAuthenticated, AdminController.addProduct);
+
+router.get("/edit-product/:id", ensureAuthenticated, AdminController.getEditProduct);
+router.post("/edit-product/:id", ensureAuthenticated, AdminController.editProduct);
+
 module.exports = router;

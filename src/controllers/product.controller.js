@@ -70,7 +70,7 @@ class ProductController {
   getDetail = async (req, res) => {
     const product = await ProductService.getProductById(req.params.id);
     const relatedProducts = await ProductService.getRelatedProducts(
-      product.type,
+      product.product_type,
       product._id,
       4
     );

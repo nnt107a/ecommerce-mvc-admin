@@ -12,7 +12,7 @@ class ProductFactory {
   static async createProduct(type, payload) {
     switch (type) {
       case "MaleClothe":
-        return new MaleClothe(payload).createProduct();
+        return new MaleClothe(payload).Product();
       case "FemaleClothe":
         return new FemaleClothe(payload).createProduct();
       case "KidClothe":
@@ -226,6 +226,7 @@ class ProductFactory {
         // Merge product details into topRevenueProducts
         const topRevenueProductsWithDetails = topRevenueProducts.map(product => {
             const productDetails = products.find(p => p._id.equals(product._id));
+            console.log(productDetails);
             return {
                 ...product,
                 productName: productDetails ? productDetails.product_name : 'Unknown'
@@ -233,6 +234,42 @@ class ProductFactory {
         });
 
         return topRevenueProductsWithDetails.reverse();
+  }
+  static async addProduct(body) {
+    const { product_name, product_thumb, product_description, product_price, product_color, product_size, product_quantity, product_type, product_attributes, product_status } = body;
+    const newProduct = new product({
+      product_name,
+      product_thumb: product_thumb.split(',').map(url => url.trim()), // Convert comma separated URLs to array
+      product_description,
+      product_price,
+      product_color,
+      product_size,
+      product_quantity,
+      product_type,
+      product_attributes: {
+        brand: product_attributes,
+      },
+      product_status
+    });
+
+    return await newProduct.save();
+  }
+  static async findByIdAndUpdate(id, body) {
+    const { product_name, product_thumb, product_description, product_price, product_color, product_size, product_quantity, product_type, product_attributes, product_status } = body;
+    return await product.findByIdAndUpdate(id, {
+      product_name,
+      product_thumb: product_thumb.split(',').map(url => url.trim()), // Convert comma separated URLs to array
+      product_description,
+      product_price,
+      product_color,
+      product_size,
+      product_quantity,
+      product_type,
+      product_attributes: {
+        brand: product_attributes,
+      },
+      product_status
+    });
   }
 }
 
