@@ -13,11 +13,64 @@ const config = require("./configs/config.mongo"); // Adjust the path as necessar
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const fileUpload = require("express-fileupload");
+const multer = require('multer');
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { getCloudinaryUrl } = require('./utils/cloudinary');
+
 
 // Sử dụng cookie-parser
 const { default: helmet } = require("helmet");
 const app = express();
 const dbUrl = config.db.url;
+
+// Initialize Cloudinary
+cloudinary.config({
+  cloud_name: 'ds2hx283s', // Your Cloud Name
+  api_key: 669931649964179,       // Your API Key
+  api_secret: 'Nb3ur2Ezmk588EpxdeGY-UTCsVc', // Your API Secret
+});
+
+// Configure Multer-Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads', // Folder name in Cloudinary
+    format: async (req, file) => 'jpeg', // Optional: auto-format to JPEG
+    public_id: (req, file) => file.originalname.split('.')[0], // Optional: Use original file name
+  },
+});
+
+const upload = multer({ storage });
+
+// Example route to handle file upload
+app.post('/upload', upload.single('image'), (req, res) => {
+  try {
+    // Cloudinary file details are available in req.file
+    res.status(200).json({ message: 'File uploaded successfully!', file: req.file });
+  } catch (error) {
+    res.status(500).json({ error: 'File upload failed.', details: error.message });
+  }
+});
+
+app.post('/uploads-multiple', upload.array('product_thumbs', 5), (req, res) => {
+  try {
+    const fileDetails = req.files.map((file) => ({
+      filename: file.filename,
+      path: file.path,
+    }));
+
+    res.status(200).json({
+      message: 'Files uploaded successfully!',
+      files: fileDetails,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to upload files.' });
+  }
+});
+
+app.locals.getCloudinaryUrl = getCloudinaryUrl;
+
 app.use((req, res, next) => {
   res.set("Cache-Control", "no-cache");
   next();

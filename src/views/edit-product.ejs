@@ -99,8 +99,8 @@
             <input type="text" class="form-control" id="productName" name="product_name" placeholder="Enter product name" value="<%= product.product_name %>" required>
           </div>
           <div class="form-group">
-            <label for="productThumb">Product Thumbnails (comma separated URLs)</label>
-            <input type="text" class="form-control" id="productThumb" name="product_thumb" placeholder="Enter product thumbnails" value="<%= product.product_thumb %>" required>
+            <label for="productThumb">Product Thumbnails</label>
+            <input type="file" class="form-control" id="productThumb" name="product_thumbs[]" multiple required>
           </div>
           <div class="form-group">
             <label for="productDescription">Product Description</label>
@@ -158,12 +158,14 @@
               <option value="Suspend" <%= product.product_status === 'Suspend' ? 'selected' : '' %>>Suspend</option>
             </select>
           </div>
+          <input type="hidden" id="productId" name="product_id" value="<%= product._id %>">
           <button type="submit" class="btn btn-primary">Edit Product</button>
         </form>
       </div>
     </div>
   </div>
   <!-- Page Content End -->
+  <script src="js/uploadHandlerEdit.js"></script>
     
 
 <%- include('./partials/footer') %>

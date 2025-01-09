@@ -25,7 +25,7 @@ function loadPage(page, sortBy = '') {
                 >
                   <img
                     class="img-fluid w-100 img-product"
-                    src="${product.product_thumb[0]}"
+                    src="${getCloudinaryUrl(product.product_thumb[0])}"
                     alt=""
                   />
                 </div>
