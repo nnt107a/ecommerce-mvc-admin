@@ -143,23 +143,7 @@ class AccessController {
   updateProfile = async (req, res) => {
     try {
       const userId = req.session.userId; // Assuming user is authenticated and user ID is available in req.user
-      const { name, address, phone } = req.body;
-      let avatar = null;
-
-      // Check if a file was uploaded
-      if (req.files && req.files.avatar) {
-        const avatarFile = req.files.avatar;
-        avatar = `avatar-${Date.now()}${path.extname(avatarFile.name)}`;
-        const uploadPath = path.join(__dirname, "../views/img", avatar);
-
-        // Move the file to the uploads directory
-        avatarFile.mv(uploadPath, (err) => {
-          if (err) {
-            console.error(err);
-            return res.status(500).json({ error: "Failed to upload avatar" });
-          }
-        });
-      }
+      const { name, address, phone, avatar } = req.body;
 
       // Find the user by ID
       const user = await AccessService.getUserById(userId);
@@ -172,8 +156,7 @@ class AccessController {
 
       // Save the updated user
       await user.save();
-
-      res.redirect("/profile"); // Redirect to profile page after update
+      //  // Redirect to profile page after update
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to update profile" });

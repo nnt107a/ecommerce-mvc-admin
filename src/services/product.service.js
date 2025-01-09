@@ -256,6 +256,21 @@ class ProductFactory {
   }
   static async findByIdAndUpdate(id, body) {
     const { product_name, product_thumb, product_description, product_price, product_color, product_size, product_quantity, product_type, product_attributes, product_status } = body;
+    if (product_thumb == "" || product_thumb == null) {
+      return await product.findByIdAndUpdate(id, {
+        product_name,
+        product_description,
+        product_price,
+        product_color,
+        product_size,
+        product_quantity,
+        product_type,
+        product_attributes: {
+          brand: product_attributes,
+        },
+        product_status
+      });
+    }
     return await product.findByIdAndUpdate(id, {
       product_name,
       product_thumb: product_thumb.split(',').map(url => url.trim()), // Convert comma separated URLs to array
