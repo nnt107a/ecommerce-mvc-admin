@@ -67,7 +67,7 @@
     <div class="col-lg-3 col-6 text-right">
       <a href="<%= page === 'detail' ? '../profile' : './profile' %>" class="btn <%= avatar != null && typeof avatar != undefined ? '' : 'border' %>">
         <% if (avatar != null && typeof avatar != undefined) { %>
-          <img src="<%= getCloudinaryUrl(avatar) %>" alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px;">
+          <img src="img/<%= avatar %>" alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px;">
         <% } else { %>
           <i class="fas fa-user text-primary"></i>
         <% } %>

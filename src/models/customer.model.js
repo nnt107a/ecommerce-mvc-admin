@@ -33,6 +33,14 @@ const customerSchema = new Schema(
 			type: Date,
 			default: Date.now,
 		},
+    address: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
 		isVerified: {
 			type: Boolean,
 			default: false,
