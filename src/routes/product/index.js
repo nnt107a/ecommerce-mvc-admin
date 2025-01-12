@@ -9,6 +9,7 @@ const router = express.Router();
 router.get("/get-all", asyncHandler(ProductController.getAllProduct));
 router.get("/get-by-id/:id", asyncHandler(ProductController.getProductById));
 router.get("/home", ProductController.getHome);
+router.get("/", ProductController.getHome);
 router.get("/home/revenue", ensureAuthenticated, ProductController.getRevenueReport);
 router.get("/home/top-product", ensureAuthenticated, ProductController.getTopRevenueProducts);
 router.get("/shop", ProductController.getShop);
