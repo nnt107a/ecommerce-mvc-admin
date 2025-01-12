@@ -34,17 +34,18 @@ class ReviewService {
       },
     };
   }
-  static async reviewsByProductId(productId) {
-    const reviews = await review
-      .find({ product_id: new ObjectId(productId) })
+  static async getReviews(productId, skip, limit) {
+    const reviews = await review.find({ product_id: new ObjectId(productId) })
+      .skip(skip)
+      .limit(limit)
       .lean();
-    console.log("okkkkkk", reviews);
-    if (!reviews) throw new FORBIDDEN("No reviews found");
+    const totalReviews = await review.countDocuments({ product_id: new ObjectId(productId) });
     return {
       success: true,
-      metadata: {
-        reviews: reviews,
-      },
+      reviews,
+      totalReviews,
+      totalPages: Math.max(Math.ceil(totalReviews / limit), 1),
+      currentPage: Math.floor(skip / limit) + 1,
     };
   }
 }

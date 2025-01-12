@@ -45,13 +45,13 @@
                             <a href="../home" class="nav-item nav-link">Home</a>
                             <a href="../shop" class="nav-item nav-link">Shop</a>
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Manage</a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="../account" class="dropdown-item">Account List</a>
-                                    <a href="../order" class="dropdown-item">Order List</a>
-                                    <a href="../manage-cate-manu" class="dropdown-item">Category & Manufacturer</a>
+                                    <a href="../cart" class="dropdown-item">Shopping Cart</a>
+                                    <a href="../order" class="dropdown-item">Order History</a>
                                 </div>
                             </div>
+                            <a href="../contact" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             <% if (typeof isAuthenticated !== 'undefined') { %>
@@ -75,7 +75,6 @@
         </div>
     </div>
     <!-- Navbar End -->
-
 
     <!-- Shop Detail Start -->
     <div class="container-fluid py-5">
@@ -145,12 +144,16 @@
                     <p class="text-muted font-weight-medium mb-0 mr-3"><%= product.product_status %></p>
                 </div>
                 <div class="d-flex align-items-center mb-4 pt-2">
-                    <a
-                    href="../edit-product/<%= product._id %>"
-                    class="btn btn-sm text-dark p-0"
-                    >
-                        <i class="fas fa-eye text-primary mr-1"></i>Edit Product
-                    </a>
+                    <div class="input-group quantity mr-3" style="width: 130px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary btn-minus" type="button"><i class="fas fa-minus"></i></button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="1" id="quantity-input">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary btn-plus" type="button"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>" data-product-price="<%= product.product_price %>"  <%= (product.status === 'Out of stock' || product.status === 'Suspend') ? 'disabled' : '' %>>Add to Cart</button>
                 </div>
                 <div class="d-flex pt-2">
                     <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
@@ -223,7 +226,11 @@
                     </div>
                     <div class="tab-pane fade" id="tab-pane-3">
                         <div class="row">
-                            <div class="col-md-6" id="reviews-container">
+                            <div class="col-md-6">
+                                <div id="reviews-container">
+                                </div>
+                                <div class="row pagination" id="pagination">
+                                </div>
                             </div>
                             
                             <div class="col-md-6">
@@ -250,7 +257,7 @@
                                         <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
                                     </div>                                 
                                 </form>
-                                <button id="fill-and-submit" class="btn btn-secondary mt-3">Test Submit</button>
+                                <button id="fill-and-submit" class="btn btn-secondary mt-3">Submit</button>
                             </div>
                             
                         </div>
@@ -291,12 +298,9 @@
                             >
                                 <i class="fas fa-eye text-primary mr-1"></i>View Detail
                             </a>
-                            <a
-                                href="../edit-product/<%= relatedProduct._id %> "
-                                class="btn btn-sm text-dark p-0"
-                            >
-                                <i class="fas fa-eye text-primary mr-1"></i>Edit Product
-                            </a>
+                            <button type="button" class="btn btn-sm text-dark p-0" onclick="addToCart('<%= relatedProduct._id %>', 1, '<%= relatedProduct.product_price %>')"  <%= (relatedProduct.status === 'Out of stock' || relatedProduct.status === 'Suspend') ? 'disabled' : '' %>>
+                                <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -325,8 +329,9 @@
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-dark mb-2" href="../home"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-dark mb-2" href="../shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-dark mb-2" href="../account"><i class="fa fa-angle-right mr-2"></i>Account List</a>
-                            <a class="text-dark mb-2" href="../order"><i class="fa fa-angle-right mr-2"></i>Order List</a>
+                            <a class="text-dark mb-2" href="../cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-dark mb-2" href="../order"><i class="fa fa-angle-right mr-2"></i>Order History</a>
+                            <a class="text-dark" href="../contact"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
@@ -334,8 +339,9 @@
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-dark mb-2" href="../home"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-dark mb-2" href="../shop"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-dark mb-2" href="../account"><i class="fa fa-angle-right mr-2"></i>Account List</a>
-                            <a class="text-dark mb-2" href="../order"><i class="fa fa-angle-right mr-2"></i>Order List</a>
+                            <a class="text-dark mb-2" href="../cart"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+                            <a class="text-dark mb-2" href="../order"><i class="fa fa-angle-right mr-2"></i>Order History</a>
+                            <a class="text-dark" href="../contact"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
