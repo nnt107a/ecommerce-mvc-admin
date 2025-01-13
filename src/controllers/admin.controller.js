@@ -18,7 +18,7 @@ class AdminController {
             // If the request is an AJAX request, return JSON data
             return res.json({ accounts, totalPages, currentPage, sortBy});
         } else {
-            const avatar = await AccessService.getAvatar(req.user.id);
+            const avatar = await AccessService.getAvatar(req.session.userId);
             return res.render("account.ejs", {
             page: "account",
             avatar,
@@ -50,34 +50,34 @@ class AdminController {
         return res.json(result);
     };
     getManageCateManu = async (req, res) => {
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         return res.render("manage-cate-manu.ejs", { page: "manage-cate-manu", avatar, isAuthenticated: req.isAuthenticated() });
     }
     addCategory = async (req, res) => {
         const result = await CategoryService.addCategory(req.body.categoryName);
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         return res.render("manage-cate-manu.ejs", { page: "manage-cate-manu", avatar, isAuthenticated: req.isAuthenticated() });
     }
     addManufacturer = async (req, res) => {
         const result = await ManufacturerService.addManufacturer(req.body.manufacturerName);
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         return res.render("manage-cate-manu.ejs", { page: "manage-cate-manu", avatar, isAuthenticated: req.isAuthenticated() });
     }
     getAddProduct = async (req, res) => {
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         const categories = await CategoryService.getCategoryName();
         const manufacturers = await ManufacturerService.getManufacturerName();
         return res.render("add-product.ejs", { page: "add-product", avatar, categories, manufacturers, isAuthenticated: req.isAuthenticated() });
     }
     addProduct = async (req, res) => {
         const result = await ProductService.addProduct(req.body);
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         const categories = await CategoryService.getCategoryName();
         const manufacturers = await ManufacturerService.getManufacturerName();
         return res.render("add-product.ejs", { page: "add-product", avatar, categories, manufacturers, isAuthenticated: req.isAuthenticated() });
     }
     getEditProduct = async (req, res) => {
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         const product = await ProductService.getProductById(req.params.id);
         const categories = await CategoryService.getCategoryName();
         const manufacturers = await ManufacturerService.getManufacturerName();
@@ -97,7 +97,7 @@ class AdminController {
             product_attributes,
             product_status
         });
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         const product = await ProductService.getProductById(req.params.id);
         const categories = await CategoryService.getCategoryName();
         const manufacturers = await ManufacturerService.getManufacturerName();
