@@ -1,3 +1,5 @@
+const getCloudinaryUrl = (publicId) => `https://res.cloudinary.com/ds2hx283s/uploads/${publicId}`;
+
 function loadPage(page, sortBy = '') {
   const searchQuery = document.getElementById('search').value;
   const productType = document.getElementById('product_type').value;

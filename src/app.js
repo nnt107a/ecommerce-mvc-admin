@@ -26,9 +26,9 @@ const dbUrl = config.db.url;
 
 // Initialize Cloudinary
 cloudinary.config({
-  cloud_name: 'ds2hx283s', // Your Cloud Name
-  api_key: 669931649964179,       // Your API Key
-  api_secret: 'Nb3ur2Ezmk588EpxdeGY-UTCsVc', // Your API Secret
+  cloud_name: process.env.CLOUDINARY_NAME, // Your Cloud Name
+  api_key: process.env.CLOUDINARY_API_KEY,       // Your API Key
+  api_secret: process.env.CLOUDINARY_API_SECRET, // Your API Secret
 });
 
 // Configure Multer-Cloudinary Storage
