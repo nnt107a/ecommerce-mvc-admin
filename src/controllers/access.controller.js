@@ -166,9 +166,9 @@ class AccessController {
         const userExist = await AccessService.getUserByName(name);
         if (userExist) {
           if (userExist.id !== userId) {
-            const user = await AccessService.getUserById(req.user.id);
-            const avatar = await AccessService.getAvatar(req.user.id);
-            const numProducts = await CartService.getCartProductsSize(req.user.id);
+            const user = await AccessService.getUserById(req.session.userId);
+            const avatar = await AccessService.getAvatar(req.session.userId);
+            const numProducts = await CartService.getCartProductsSize(req.session.userId);
             return res.render("profile.ejs", {
               page: "profile",
               avatar,

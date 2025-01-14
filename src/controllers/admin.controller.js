@@ -34,10 +34,10 @@ class AdminController {
     };
     getDetail = async (req, res) => {
         const account = await CustomerService.getUserById(req.params.id);
-        const avatar = await AccessService.getAvatar(req.user ? req.user.id : null);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         console.log(account);
         return res.render("account-detail.ejs", {
-          sessionUserId: req.user.id,
+          sessionUserId: req.session.userId,
           account: account,
           page: "detail",
           avatar,
