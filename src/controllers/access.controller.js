@@ -11,7 +11,7 @@ class AccessController {
   };
   getVerificationpage = async (req, res) => {
     const avatar = await AccessService.getAvatar(req.session.userId);
-    res.render("verifycation-signup", { avatar });
+    res.render("verifycation-signup", { avatar, isAuthenticated: req.isAuthenticated() });
   };
   logOut = function (req, res, next) {
     console.log("Session ID (req.sessionID):", req.sessionID);
