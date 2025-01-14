@@ -1,6 +1,7 @@
 "use strict";
 
 const AccessService = require("../services/access.service");
+const CartService = require("../services/cart.service");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const passport = require("passport");
@@ -165,14 +166,12 @@ class AccessController {
       if (name) {
         const userExist = await AccessService.getUserByName(name);
         if (userExist) {
-          if (userExist.id !== userId) {
+          if (userExist._id.toString() !== userId) {
             const user = await AccessService.getUserById(req.session.userId);
             const avatar = await AccessService.getAvatar(req.session.userId);
-            const numProducts = await CartService.getCartProductsSize(req.session.userId);
             return res.render("profile.ejs", {
               page: "profile",
               avatar,
-              numProducts,
               user: user,
               isAuthenticated: req.isAuthenticated(),
               error: "Name already exist",
