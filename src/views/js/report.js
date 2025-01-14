@@ -47,10 +47,6 @@ $(document).ready(function() {
                     }
                 });
             },
-            error: function(error) {
-                console.error('Error:', error);
-                alert('An error occurred while fetching the revenue report.');
-            }
         });
     }
 
@@ -100,10 +96,6 @@ $(document).ready(function() {
                     }
                 });
             },
-            error: function(error) {
-                console.error('Error:', error);
-                alert('An error occurred while fetching the revenue report.');
-            }
         });
     }
 
